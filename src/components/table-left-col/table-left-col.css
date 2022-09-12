@@ -1,0 +1,6 @@
+.table-left-col {
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  margin: 10px;
+}

@@ -2,7 +2,6 @@ import React from "react";
 import { FC } from "react";
 import SearchInput from "../search-input/search-input";
 import * as appApi from "../../utils/app-api";
-import { DataContext } from "../../contexts/data-context";
 import TableLeftCol from "../table-left-col/table-left-col";
 import { IArrayDay, IArrayDays, IUserData } from "../../utils/types";
 import Table from "../table/table";
@@ -369,44 +368,42 @@ const App: FC = () => {
   }
 
   return isLoading ? (
-    <DataContext.Provider value={currentData}>
-      <div className="page">
-        <SearchInput
-          searchUserByName={searchUserByName}
-          clearState={clearState}
+    <div className="page">
+      <SearchInput
+        searchUserByName={searchUserByName}
+        clearState={clearState}
+      />
+      <div className="content">
+        <TableLeftCol
+          data={fullNameForPage}
+          sort={leftColSort}
+          onSortByName={onSortByName}
         />
-        <div className="content">
-          <TableLeftCol
-            data={fullNameForPage}
-            sort={leftColSort}
-            onSortByName={onSortByName}
-          />
-          <Table
-            data={pageData}
-            onSortByDay={onSortByDay}
-            arrayDays={arrayDays.arrayDays}
-          />
-          <TableRightCol
-            data={timeTotalForPage}
-            sort={rightColSort}
-            onSortByTimeTotal={onSortByTimeTotal}
-          />
-        </div>
-        <div className="page-number-block">
-          <p>{` ${numberPage} - ${
-            quantityUsers > numberPage + quantityElementsOnPage - 1
-              ? numberPage + quantityElementsOnPage - 1
-              : quantityUsers
-          } of ${quantityUsers}`}</p>
-          <p className="button-select-page" onClick={handleClickReducePage}>
-            {"<"}
-          </p>
-          <p className="button-select-page" onClick={handleClickAddPage}>
-            {">"}
-          </p>
-        </div>
+        <Table
+          data={pageData}
+          onSortByDay={onSortByDay}
+          arrayDays={arrayDays.arrayDays}
+        />
+        <TableRightCol
+          data={timeTotalForPage}
+          sort={rightColSort}
+          onSortByTimeTotal={onSortByTimeTotal}
+        />
       </div>
-    </DataContext.Provider>
+      <div className="page-number-block">
+        <p>{` ${numberPage} - ${
+          quantityUsers > numberPage + quantityElementsOnPage - 1
+            ? numberPage + quantityElementsOnPage - 1
+            : quantityUsers
+        } of ${quantityUsers}`}</p>
+        <p className="button-select-page" onClick={handleClickReducePage}>
+          {"<"}
+        </p>
+        <p className="button-select-page" onClick={handleClickAddPage}>
+          {">"}
+        </p>
+      </div>
+    </div>
   ) : (
     <div>Грузится...</div>
   );

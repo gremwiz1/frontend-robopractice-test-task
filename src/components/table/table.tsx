@@ -25,6 +25,7 @@ const Table: FC<ITable> = ({ data, arrayDays, onSortByDay }) => {
               key={makeUUID()}
               sort={day.sort}
               onSort={onClick}
+              clickable={true}
             />
           ))}
         </div>

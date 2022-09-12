@@ -19,7 +19,12 @@ const TableRightCol: FC<ITableRightCol> = ({
   }
   return (
     <div className="table-right-col">
-      <TableCell data="Monthly total" onSort={sortTotalTime} sort={sort} />
+      <TableCell
+        data="Monthly total"
+        onSort={sortTotalTime}
+        sort={sort}
+        clickable={true}
+      />
       {data.map((totalTime) => (
         <TableCell data={parseTime(totalTime)} key={makeUUID()} />
       ))}

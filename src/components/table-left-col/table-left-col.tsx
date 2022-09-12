@@ -13,7 +13,7 @@ const TableLeftCol: FC<ITableLeftCol> = ({ data, sort, onSortByName }) => {
   }
   return (
     <div className="table-left-col">
-      <TableCell data="User" onSort={sortUser} sort={sort} />
+      <TableCell data="User" onSort={sortUser} sort={sort} clickable={true} />
       {data.map((user, id) => (
         <TableCell data={user} key={id} />
       ))}

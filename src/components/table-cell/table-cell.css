@@ -6,3 +6,10 @@
   justify-content: center;
   align-items: center;
 }
+.cell-up {
+  cursor: pointer;
+  transition: 1s;
+}
+.cell-up:hover {
+  opacity: 0.5;
+}

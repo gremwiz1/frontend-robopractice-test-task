@@ -1,0 +1,20 @@
+.search {
+  display: flex;
+}
+.input {
+  width: 200px;
+  margin-right: 10px;
+}
+.button-search {
+  cursor: pointer;
+  background: blue;
+  transition: 1s;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.button-clear {
+  background: green;
+}
+.butoon-search:hover {
+  opacity: 0.7;
+}

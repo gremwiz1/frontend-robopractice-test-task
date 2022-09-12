@@ -11,7 +11,7 @@ import "./app.css";
 import TableRightCol from "../table-right-col/table-right-col";
 
 const App: FC = () => {
-  const [data, setData] = React.useState({ data: [] });
+  const [data, setData] = React.useState({ data: [] as IUserData[] });
   const [currentData, setCurrentData] = React.useState({
     data: [] as IUserData[],
   });
@@ -306,10 +306,75 @@ const App: FC = () => {
       )
     );
   }
+
+  function searchUserByName(name: string) {
+    const searchUser = currentData.data.find((user) => user.Fullname === name);
+    if (searchUser) {
+      setCurrentData({ data: [searchUser] });
+      setNumberPage(1);
+      setPageData({ data: [searchUser] });
+      setFullName([searchUser.Fullname]);
+      setFullNameForPage([searchUser.Fullname]);
+      if (searchUser.totalTimeInMonth) {
+        setTimeTotal([searchUser.totalTimeInMonth]);
+        setTimeTotalForPage([searchUser.totalTimeInMonth]);
+      }
+      setQuantityUsers(1);
+    } else {
+      alert("Такой пользователь не найден");
+    }
+  }
+
+  function clearState() {
+    data.data.sort((n1, n2) => {
+      if (n1.Fullname > n2.Fullname) {
+        return 1;
+      }
+
+      if (n1.Fullname < n2.Fullname) {
+        return -1;
+      }
+
+      return 0;
+    });
+    setCurrentData({ data: data.data });
+    const arrayUserForPage = data.data.slice(0, quantityElementsOnPage);
+    setPageData({ data: arrayUserForPage });
+    const arrayFullName: string[] = [];
+    const arrayTimeTotal: number[] = [];
+    data.data.forEach((user) => {
+      arrayFullName.push(user.Fullname);
+      if (user.totalTimeInMonth) {
+        arrayTimeTotal.push(user.totalTimeInMonth);
+      }
+    });
+    setFullName(arrayFullName);
+    setTimeTotal(arrayTimeTotal);
+    const arrayFullNameForPage = arrayFullName.slice(0, quantityElementsOnPage);
+    const arrayTimeTotalForPage = arrayTimeTotal.slice(
+      0,
+      quantityElementsOnPage
+    );
+    setTimeTotalForPage(arrayTimeTotalForPage);
+    setFullNameForPage(arrayFullNameForPage);
+    setQuantityUsers(data.data.length);
+    setLeftColSort("none");
+    setRightColSort("none");
+    const newArray: IArrayDay[] = [];
+    arrayDays.arrayDays.forEach((elem) => {
+      elem.sort = "none";
+      newArray.push(elem);
+    });
+    setArrayDays({ arrayDays: newArray });
+  }
+
   return isLoading ? (
     <DataContext.Provider value={currentData}>
       <div className="page">
-        <SearchInput />
+        <SearchInput
+          searchUserByName={searchUserByName}
+          clearState={clearState}
+        />
         <div className="content">
           <TableLeftCol
             data={fullNameForPage}

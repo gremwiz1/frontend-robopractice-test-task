@@ -12,8 +12,10 @@ import TableRightCol from "../table-right-col/table-right-col";
 
 const App: FC = () => {
   const [data, setData] = React.useState({ data: [] });
-  const [currentData, setCurrentData] = React.useState({ data: [] });
-  const [pageData, setPageData] = React.useState({ data: [] });
+  const [currentData, setCurrentData] = React.useState({
+    data: [] as IUserData[],
+  });
+  const [pageData, setPageData] = React.useState({ data: [] as IUserData[] });
   const [isLoading, setIsLoading] = React.useState(false);
   const [fullName, setFullName] = React.useState([] as string[]);
   const [fullNameForPage, setFullNameForPage] = React.useState([] as string[]);
@@ -39,15 +41,37 @@ const App: FC = () => {
   }, []);
 
   function onSortByDay(data: string) {
+    const day = parseInt(data);
     const newArray: IArrayDay[] = [];
     arrayDays.arrayDays.forEach((elem) => {
-      if (elem.day === parseInt(data)) {
+      if (elem.day === day) {
         if (elem.sort === "none") {
           elem.sort = "inc";
+          currentData.data.sort(function (a, b) {
+            if (a.data && b.data) {
+              return a.data[day - 1].time - b.data[day - 1].time;
+            }
+            return 0;
+          });
+          setStatesBeforSort(currentData.data);
         } else if (elem.sort === "inc") {
           elem.sort = "dec";
+          currentData.data.sort(function (a, b) {
+            if (a.data && b.data) {
+              return b.data[day - 1].time - a.data[day - 1].time;
+            }
+            return 0;
+          });
+          setStatesBeforSort(currentData.data);
         } else if (elem.sort === "dec") {
           elem.sort = "inc";
+          currentData.data.sort(function (a, b) {
+            if (a.data && b.data) {
+              return a.data[day - 1].time - b.data[day - 1].time;
+            }
+            return 0;
+          });
+          setStatesBeforSort(currentData.data);
         }
         newArray.push(elem);
       } else {
@@ -70,10 +94,46 @@ const App: FC = () => {
     setRightColSort("none");
     if (leftColSort === "none") {
       setLeftColSort("inc");
+      currentData.data.sort((n1, n2) => {
+        if (n1.Fullname > n2.Fullname) {
+          return -1;
+        }
+
+        if (n1.Fullname < n2.Fullname) {
+          return 1;
+        }
+
+        return 0;
+      });
+      setStatesBeforSort(currentData.data);
     } else if (leftColSort === "inc") {
       setLeftColSort("dec");
+      currentData.data.sort((n1, n2) => {
+        if (n1.Fullname > n2.Fullname) {
+          return 1;
+        }
+
+        if (n1.Fullname < n2.Fullname) {
+          return -1;
+        }
+
+        return 0;
+      });
+      setStatesBeforSort(currentData.data);
     } else if (leftColSort === "dec") {
       setLeftColSort("inc");
+      currentData.data.sort((n1, n2) => {
+        if (n1.Fullname > n2.Fullname) {
+          return -1;
+        }
+
+        if (n1.Fullname < n2.Fullname) {
+          return 1;
+        }
+
+        return 0;
+      });
+      setStatesBeforSort(currentData.data);
     }
   }
 
@@ -87,10 +147,31 @@ const App: FC = () => {
     setLeftColSort("none");
     if (rightColSort === "none") {
       setRightColSort("inc");
+      currentData.data.sort(function (a, b) {
+        if (a.totalTimeInMonth && b.totalTimeInMonth) {
+          return a.totalTimeInMonth - b.totalTimeInMonth;
+        }
+        return 0;
+      });
+      setStatesBeforSort(currentData.data);
     } else if (rightColSort === "inc") {
       setRightColSort("dec");
+      currentData.data.sort(function (a, b) {
+        if (a.totalTimeInMonth && b.totalTimeInMonth) {
+          return b.totalTimeInMonth - a.totalTimeInMonth;
+        }
+        return 0;
+      });
+      setStatesBeforSort(currentData.data);
     } else if (rightColSort === "dec") {
       setRightColSort("inc");
+      currentData.data.sort(function (a, b) {
+        if (a.totalTimeInMonth && b.totalTimeInMonth) {
+          return a.totalTimeInMonth - b.totalTimeInMonth;
+        }
+        return 0;
+      });
+      setStatesBeforSort(currentData.data);
     }
   }
 
@@ -195,6 +276,36 @@ const App: FC = () => {
     }
   }
 
+  function setStatesBeforSort(data: IUserData[]) {
+    setCurrentData({ data: data });
+    const arrayUserForPage = data.slice(
+      numberPage - 1,
+      numberPage - 1 + quantityElementsOnPage
+    );
+    setPageData({ data: arrayUserForPage });
+    const arrayFullName: string[] = [];
+    const arrayTimeTotal: number[] = [];
+    data.forEach((user) => {
+      arrayFullName.push(user.Fullname);
+      if (user.totalTimeInMonth) {
+        arrayTimeTotal.push(user.totalTimeInMonth);
+      }
+    });
+    setFullName(arrayFullName);
+    setFullNameForPage(
+      arrayFullName.slice(
+        numberPage - 1,
+        numberPage - 1 + quantityElementsOnPage
+      )
+    );
+    setTimeTotal(arrayTimeTotal);
+    setTimeTotalForPage(
+      arrayTimeTotal.slice(
+        numberPage - 1,
+        numberPage - 1 + quantityElementsOnPage
+      )
+    );
+  }
   return isLoading ? (
     <DataContext.Provider value={currentData}>
       <div className="page">

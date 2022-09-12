@@ -3,20 +3,22 @@ import TableCell from "../table-cell/table-cell";
 import "./table-left-col.css";
 
 interface ITableLeftCol {
-    data: string[];
+  data: string[];
+  sort: string;
+  onSortByName: () => void;
 }
-const TableLeftCol: FC<ITableLeftCol> = ({data}) => {
+const TableLeftCol: FC<ITableLeftCol> = ({ data, sort, onSortByName }) => {
   function sortUser() {
+    onSortByName();
+  }
+  return (
+    <div className="table-left-col">
+      <TableCell data="User" onSort={sortUser} sort={sort} />
+      {data.map((user, id) => (
+        <TableCell data={user} key={id} />
+      ))}
+    </div>
+  );
+};
 
-  }
-    return (
-      <div className="table-left-col">
-        <TableCell data='User' onClick={sortUser}/>
-        {data.map((user, id) => (
-            <TableCell data={user} key={id}/>
-        ))}
-      </div>
-    );
-  }
-  
-  export default TableLeftCol;
+export default TableLeftCol;

@@ -17,3 +17,10 @@ export interface IUserData {
 export interface IData {
     data: IUserData[]
 }
+export interface IArrayDay {
+    day: number;
+    sort: string;
+  }
+ export interface IArrayDays {
+    arrayDays: IArrayDay[]
+  }

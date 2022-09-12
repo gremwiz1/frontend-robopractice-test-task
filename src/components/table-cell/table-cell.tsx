@@ -3,20 +3,21 @@ import  "./table-cell.css";
 
 interface ITableCell {
     data: string;
-    onClick?: () => void;
+    onSort?: any;
+    sort?: string; //('dec' | 'inc' | 'none')
 }
 
-const TableCell: FC<ITableCell> = ({data, onClick}) => {
+const TableCell: FC<ITableCell> = ({data, onSort, sort}) => {
 
-    function handleClick() {
-        if(onClick) {
-            onClick();
+    const handleClick: React.MouseEventHandler<HTMLElement> = (e) => {
+        if(onSort) {
+            onSort(data);
         }
     }
 
     return (
       <div className="cell" onClick={handleClick}>
-        {data}
+        {data}{sort === 'inc' ? "↑" : ""}{sort === 'dec' ? "↓" : ""}
       </div>
     );
   }

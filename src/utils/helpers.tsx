@@ -10,5 +10,8 @@ return deltaTime;
 export function parseTime(time:number) {
     const hours = (time - time % 60) / 60;
     const minutes = time % 60;
+    if(hours === 0 && minutes === 0) {
+        return '0';
+    }
     return `${hours}:${minutes}`;
 }

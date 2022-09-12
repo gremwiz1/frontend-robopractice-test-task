@@ -5,20 +5,26 @@ import "./table-right-col.css";
 import { v4 as makeUUID } from "uuid";
 
 interface ITableRightCol {
-    data: number[];
+  data: number[];
+  sort: string;
+  onSortByTimeTotal: () => void;
 }
-const TableRightCol: FC<ITableRightCol> = ({data}) => {
+const TableRightCol: FC<ITableRightCol> = ({
+  data,
+  sort,
+  onSortByTimeTotal,
+}) => {
   function sortTotalTime() {
+    onSortByTimeTotal();
+  }
+  return (
+    <div className="table-right-col">
+      <TableCell data="Monthly total" onSort={sortTotalTime} sort={sort} />
+      {data.map((totalTime) => (
+        <TableCell data={parseTime(totalTime)} key={makeUUID()} />
+      ))}
+    </div>
+  );
+};
 
-  }
-    return (
-      <div className="table-right-col">
-        <TableCell data='Monthly total' onClick={sortTotalTime}/>
-        {data.map((totalTime) => (
-            <TableCell data={parseTime(totalTime)} key={makeUUID()}/>
-        ))}
-      </div>
-    );
-  }
-  
-  export default TableRightCol;
+export default TableRightCol;
